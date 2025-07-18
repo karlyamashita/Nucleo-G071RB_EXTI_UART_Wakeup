@@ -1,0 +1,94 @@
+VERSION
+8
+
+COMMSETTINGS
+0
+COM30
+COM6
+115200
+2
+63
+4
+0
+0
+
+COMMDISPLAY
+0
+
+VERSATAP
+0
+
+CHANNELALIAS
+
+
+
+SEND
+0
+version
+76 65 72 73 69 6F 6E 0D 0A
+0
+5
+
+SEND
+1
+sleep mode
+73 6C 65 65 70 6D 6F 64 65 0D 0A
+0
+5
+
+SEND
+2
+stop mode
+73 74 6F 70 6D 6F 64 65 0D 0A
+0
+5
+
+SEND
+3
+standbymode
+73 74 61 6E 64 62 79 6D 6F 64 65 0D 0A
+0
+5
+
+SEND
+4
+shutdownmode
+73 68 75 74 64 6F 77 6E 6D 6F 64 65 0D 0A
+0
+5
+
+SEND
+5
+***** Button Config *****
+
+0
+5
+
+SEND
+6
+buttonsleep
+62 75 74 74 6F 6E 73 6C 65 65 70 0D 0A
+0
+5
+
+SEND
+7
+buttonstop
+62 75 74 74 6F 6E 73 74 6F 70 0D 0A
+0
+5
+
+SEND
+8
+buttonstandby
+62 75 74 74 6F 6E 73 74 61 6E 64 62 79 0D 0A
+0
+5
+
+SEND
+9
+buttonshutdown
+62 75 74 74 6F 6E 73 68 75 74 64 6F 77 6E 0D 0A
+0
+5
+
