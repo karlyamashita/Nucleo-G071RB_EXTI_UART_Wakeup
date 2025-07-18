@@ -47,7 +47,7 @@ extern "C" {
 #include "Flash_ReadWrite_Drv_STM32.h"
 #include "Flash_Handler.h"
 #include "GPIO_Handler.h"
-#include "LSI_ClockConfig.h"
+#include <HSI_ClockConfig.h>
 #include "PowerMode.h"
 #include "StringManip.h"
 #include "TimerCallback.h"
@@ -92,8 +92,6 @@ void RunClockConfig(void);
 #define Button_Pin GPIO_PIN_13
 #define Button_GPIO_Port GPIOC
 #define Button_EXTI_IRQn EXTI4_15_IRQn
-#define MCO_Pin GPIO_PIN_0
-#define MCO_GPIO_Port GPIOF
 #define USART2_TX_Pin GPIO_PIN_2
 #define USART2_TX_GPIO_Port GPIOA
 #define USART2_RX_Pin GPIO_PIN_3
@@ -112,6 +110,9 @@ void RunClockConfig(void);
 #define LED_Stop_GPIO_Port GPIOD
 #define LED_Standby_Pin GPIO_PIN_4
 #define LED_Standby_GPIO_Port GPIOD
+#define ModeChange_Pin GPIO_PIN_6
+#define ModeChange_GPIO_Port GPIOB
+#define ModeChange_EXTI_IRQn EXTI4_15_IRQn
 
 /* USER CODE BEGIN Private defines */
 

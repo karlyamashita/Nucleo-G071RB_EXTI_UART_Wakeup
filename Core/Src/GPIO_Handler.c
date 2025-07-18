@@ -30,6 +30,21 @@ void GPIO_Handler(uint16_t GPIO_Pin)
 			ButtonPressed(0);
 		}
 	}
+	else if(GPIO_Pin == ModeChange_Pin)
+	{
+		pinState = HAL_GPIO_ReadPin(ModeChange_GPIO_Port, ModeChange_Pin);
+		if(!pinState) // pressed
+		{
+			// start 1000ms debounce before calling ButtonDebounced
+			TimerCallbackTimerStart(&timerCallback, ButtonModeChange, 10, TIMER_NO_REPEAT);
+		}
+		else // released
+		{
+			// Disable the TimerCallback so ButtonDebounced is not called
+			TimerCallbackDisable(&timerCallback, ButtonModeChange);
+			ButtonPressed(0);
+		}
+	}
 }
 
 

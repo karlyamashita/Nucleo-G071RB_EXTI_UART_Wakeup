@@ -15,6 +15,7 @@
 /*
  * Description: Any interrupt will exit Sleep mode
  * 				Be sure NVIC for GPIO EXTI is enabled
+ * 				Because SysTick is an interrupt, we have to suspend it prior to entering sleep mode, else SysTick will wake up the STM32
  */
 void EnterSleepMode(void)
 {
@@ -28,7 +29,7 @@ void EnterSleepMode(void)
 }
 
 /*
- * Description: Any interrupt will exit Stop mode.
+ * Description: Any EXTI will exit Stop mode.
  * 				Certain peripherals will exit Stop mode
  * 				Be sure NVIC for GPIO EXTI is enabled
  * 				Wake up system clock is HSISYS
@@ -36,8 +37,6 @@ void EnterSleepMode(void)
 void EnterStopMode(void)
 {
 	UART_WakeUpTypeDef WakeUpSelection = {0};
-
-	HAL_SuspendTick();
 
 	LED_Off();
 
@@ -53,13 +52,13 @@ void EnterStopMode(void)
 		Error_Handler();
 	}
 
+	HSI_SystemClock_Config();
+
 	HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
 
 	HAL_UARTEx_DisableStopMode(&huart2);
 
 	RunClockConfig(); // calls SystemClock_Config()
-
-	HAL_ResumeTick();
 }
 
 /*
@@ -77,8 +76,6 @@ void EnterStopMode(void)
  */
 void EnterStandbyMode(void)
 {
-	HAL_SuspendTick();
-
 	LED_Off();
 
 	__HAL_PWR_CLEAR_FLAG(PWR_FLAG_WUF2); // PWR_FLAG_WUF2
@@ -87,8 +84,6 @@ void EnterStandbyMode(void)
 	HAL_PWR_EnterSTANDBYMode();
 
 	RunClockConfig(); // calls SystemClock_Config()
-
-	HAL_ResumeTick();
 }
 
 /*
@@ -106,8 +101,6 @@ void EnterStandbyMode(void)
  */
 void EnterShutdownMode(void)
 {
-	HAL_SuspendTick();
-
 	LED_Off();
 
 	__HAL_PWR_CLEAR_FLAG(PWR_FLAG_WUF2); // PWR_FLAG_WUF2
@@ -116,8 +109,6 @@ void EnterShutdownMode(void)
 	HAL_PWREx_EnterSHUTDOWNMode();
 
 	RunClockConfig(); // calls SystemClock_Config()
-
-	HAL_ResumeTick();
 }
 
 /*

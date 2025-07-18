@@ -60,6 +60,7 @@ void STM32_Ready(UART_DMA_Struct_t *msg);
 
 
 void ButtonDebounced(void);
+void ButtonModeChange(void);
 void ButtonPwrStateInit(Button_t *button);
 
 

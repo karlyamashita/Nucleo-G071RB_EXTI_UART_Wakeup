@@ -71,6 +71,7 @@ void PollingInit(void)
     TimerCallbackRegisterOnly(&timerCallback, EnterStandbyMode);
     TimerCallbackRegisterOnly(&timerCallback, EnterShutdownMode);
     TimerCallbackRegisterOnly(&timerCallback, ButtonDebounced);
+    TimerCallbackRegisterOnly(&timerCallback, ButtonModeChange);
 
     ButtonPwrStateInit(&button);
 
@@ -111,58 +112,62 @@ void UART_ParseCommands(UART_DMA_Struct_t *msg)
 		else if(strncmp(ptr, "sleepmode", strlen("sleepmode"))== 0)
 		{
 			TimerCallbackTimerStart(&timerCallback, EnterSleepMode, 1000, TIMER_NO_REPEAT);
-			LED_Set(sleepmode);
-			flashData[0] = sleepmode;
+			button.pwr_state = sleepmode;
+			LED_Set(button.pwr_state);
+			flashData[0] = button.pwr_state;
 			FLASH_WriteDoubleWord(&flashMsg);
 		}
 		else if(strncmp(ptr, "stopmode", strlen("stopmode"))== 0)
 		{
 			TimerCallbackTimerStart(&timerCallback, EnterStopMode, 1000, TIMER_NO_REPEAT);
-			LED_Set(stopmode);
-			flashData[0] = stopmode;
+			button.pwr_state = stopmode;
+			LED_Set(button.pwr_state);
+			flashData[0] = button.pwr_state;
 			FLASH_WriteDoubleWord(&flashMsg);
 		}
 		else if(strncmp(ptr, "standbymode", strlen("standbymode"))== 0)
 		{
 			TimerCallbackTimerStart(&timerCallback, EnterStandbyMode, 1000, TIMER_NO_REPEAT);
-			LED_Set(standbymode);
-			flashData[0] = standbymode;
+			button.pwr_state = standbymode;
+			LED_Set(button.pwr_state);
+			flashData[0] = button.pwr_state;
 			FLASH_WriteDoubleWord(&flashMsg);
 		}
 		else if(strncmp(ptr, "shutdownmode", strlen("shutdownmode"))== 0)
 		{
 			TimerCallbackTimerStart(&timerCallback, EnterShutdownMode, 1000, TIMER_NO_REPEAT);
-			LED_Set(shutdownmode);
-			flashData[0] = shutdownmode;
+			button.pwr_state = shutdownmode;
+			LED_Set(button.pwr_state);
+			flashData[0] = button.pwr_state;
 			FLASH_WriteDoubleWord(&flashMsg);
 		}
 
 		else if(strncmp(ptr, "buttonsleep", strlen("buttonsleep"))== 0)
 		{
 			button.pwr_state = sleepmode;
-			LED_Set(sleepmode);
-			flashData[0] = sleepmode;
+			LED_Set(button.pwr_state);
+			flashData[0] = button.pwr_state;
 			FLASH_WriteDoubleWord(&flashMsg);
 		}
 		else if(strncmp(ptr, "buttonstop", strlen("buttonstop"))== 0)
 		{
 			button.pwr_state = stopmode;
-			LED_Set(stopmode);
-			flashData[0] = stopmode;
+			LED_Set(button.pwr_state);
+			flashData[0] = button.pwr_state;
 			FLASH_WriteDoubleWord(&flashMsg);
 		}
 		else if(strncmp(ptr, "buttonstandby", strlen("buttonstandby"))== 0)
 		{
 			button.pwr_state = standbymode;
-			LED_Set(standbymode);
-			flashData[0] = standbymode;
+			LED_Set(button.pwr_state);
+			flashData[0] = button.pwr_state;
 			FLASH_WriteDoubleWord(&flashMsg);
 		}
 		else if(strncmp(ptr, "buttonshutdown", strlen("buttonshutdown"))== 0)
 		{
 			button.pwr_state = shutdownmode;
-			LED_Set(shutdownmode);
-			flashData[0] = shutdownmode;
+			LED_Set(button.pwr_state);
+			flashData[0] = button.pwr_state;
 			FLASH_WriteDoubleWord(&flashMsg);
 		}
 		else
@@ -226,6 +231,22 @@ void ButtonDebounced(void)
 
 	sprintf(str, "EnteringS***Mode in 1 second");
 	UART_DMA_NotifyUser(&uart2_msg, str, strlen(str), true);
+}
+
+/*
+ * Description: Sequence through and change modes
+ */
+void ButtonModeChange(void)
+{
+	button.pwr_state += 1;
+	if(button.pwr_state >= 4)
+	{
+		button.pwr_state = 0;
+	}
+
+	LED_Set(button.pwr_state);
+	flashData[0] = button.pwr_state;
+	FLASH_WriteDoubleWord(&flashMsg);
 }
 
 /*
